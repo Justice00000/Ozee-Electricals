@@ -18,6 +18,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # These are public Supabase browser credentials. They are injected only at build time
+    # so Vite can replace import.meta.env.VITE_* in the static bundle.
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -31,13 +37,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify Supabase configuration
+        shell: bash
+        run: |
+          if [ -z "$VITE_SUPABASE_URL" ]; then
+            echo "::error::Missing GitHub Actions secret VITE_SUPABASE_URL"
+            exit 1
+          fi
+          if [ -z "$VITE_SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "::error::Missing GitHub Actions secret VITE_SUPABASE_PUBLISHABLE_KEY"
+            exit 1
+          fi
+
       - name: Build
         run: npm run build
 
-      - name: Verify static output
+      - name: Prepare GitHub Pages SPA fallback
         run: |
           test -d .output/public
           test -f .output/public/index.html
+          cp .output/public/index.html .output/public/404.html
           echo "GitHub Pages output:"
           find .output/public -maxdepth 2 -type f | head -50
 

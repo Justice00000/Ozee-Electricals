@@ -8,6 +8,9 @@ export const getRouter = () => {
 
   const router = createRouter({
     routeTree,
+    // GitHub Pages project-site base path.
+    // This will be changed to / when ozee-electrical.com is connected.
+    basepath: "/Ozee-Electricals",
     context: { queryClient },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,

@@ -9,20 +9,23 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  // GitHub Pages serves this project from /Ozee-Electricals/.
-  // This will be changed to / when the custom domain is connected.
-  base: "/Ozee-Electricals/",
+  vite: {
+    // GitHub Pages repository site base path
+    base: "/Ozee-Electricals/",
+  },
+
   tanstackStart: {
-    // Generate a static SPA shell for GitHub Pages.
-    // Server-side functionality remains available when deployed to a server-capable platform.
+    // Generate a static SPA shell for GitHub Pages
     spa: {
       prerender: {
         outputPath: "/index.html",
         crawlLinks: false,
       },
     },
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
+
+    // Use src/server.ts as the TanStack Start server entry
+    server: {
+      entry: "server",
+    },
   },
 });

@@ -10,8 +10,8 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   vite: {
-    // GitHub Pages repository site base path
-    base: "/Ozee-Electricals/",
+    // Custom domain is served from the root path.
+    base: "/",
   },
 
   tanstackStart: {
